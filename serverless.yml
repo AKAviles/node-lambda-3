@@ -8,12 +8,43 @@ provider:
   runtime: nodejs18.x
   apiGateway:
     restApiId: ${cf:shared-gateway-dev.apiGatewayRestApiId}
-    restApiRootResourceId: ${cf:node-lambda-1-dev.ApiGatewayResourceProducts}
-
+    restApiRootResourceId: !Ref rApiGatewaySocial
 functions:
-  categories:
+  admins:
     handler: index.handler
     events:
       - http:
-          path: categories
+          path: ""
           method: get
+
+resources:
+  - Resources:
+      rApiGatewayAdmins:
+        Type: AWS::ApiGateway::Resource
+        Properties:
+          ParentId: ${cf:shared-gateway-dev.apiGatewayRestApiId}
+resources:
+  - Resources:
+      rApiGatewayAdmins1:
+        Type: AWS::ApiGateway::Resource
+        Properties:
+          ParentId: ${cf:node-lambda-2-dev.oApiGatewayAdminsId}
+          PathPart: admins1
+          RestApiId: ${cf:shared-gateway-dev.apiGatewayRestApiId}
+      rApiGatewaySocial:
+        Type: AWS::ApiGateway::Resource
+        Properties:
+          ParentId: !Ref rApiGatewayAdmins1
+          PathPart: social
+          RestApiId: ${cf:shared-gateway-dev.apiGatewayRestApiId}
+  - Outputs:
+      oApiGatewayAdmins1Id:
+        Value:
+          Ref: rApiGatewayAdmins1
+        Export:
+          Name: admins1-apigateway
+      oApiGatewayAdmin1SocialId:
+        Value:
+          Ref: rApiGatewaySocial
+        Export:
+          Name: social-gateway
