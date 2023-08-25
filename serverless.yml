@@ -16,13 +16,6 @@ functions:
       - http:
           path: ""
           method: get
-
-resources:
-  - Resources:
-      rApiGatewayAdmins:
-        Type: AWS::ApiGateway::Resource
-        Properties:
-          ParentId: ${cf:shared-gateway-dev.apiGatewayRestApiId}
 resources:
   - Resources:
       rApiGatewayAdmins1:
